@@ -1,0 +1,23 @@
+[
+  {
+    "name": "A",
+    "tank": {
+      "capacity": 500
+    },
+    "adjacencies": ["B"]
+  },
+  {
+    "name": "B",
+    "tank": {
+      "capacity": 500
+    },
+    "adjacencies": ["C"]
+  },
+  {
+    "name": "C",
+    "tank": {
+      "capacity": 500
+    },
+    "adjacencies": ["A"]
+  }
+]
