@@ -15,9 +15,7 @@
   },
   {
     "name": "C",
-    "tank": {
-      "capacity": 500
-    },
+    "tank": null,
     "adjacencies": ["A"]
   }
 ]
