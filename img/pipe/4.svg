@@ -31,7 +31,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="69.79167"
+     inkscape:cx="-22.79167"
      inkscape:cy="193.66142"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -72,5 +72,10 @@
        height="204.79999"
        x="32"
        y="-6.4000015" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.40645921;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 144,40 v 56.02989 55.91032 l 112,-55.9701 z m 112,55.97011 v 55.9701 L 368,95.97011 256,40 Z m 112,0 v 55.9701 L 480,95.97011 368,40 Z M 144,96.02989 32,40.059782 V 152 Z"
+       id="path10-7"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

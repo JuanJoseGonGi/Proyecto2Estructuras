@@ -15,12 +15,12 @@
    version="1.1"
    id="SVGRoot"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="2.svg"
-   inkscape:export-filename="C:\Users\JuanJoseGonGi\python\proyecto2\img\pipe\2.png"
+   sodipodi:docname="6.svg"
+   inkscape:export-filename="C:\Users\JuanJoseGonGi\python\proyecto2\img\pipe\6.png"
    inkscape:export-xdpi="12"
    inkscape:export-ydpi="12">
   <title
-     id="title6205">pipe2</title>
+     id="title6205">4</title>
   <defs
      id="defs6136" />
   <sodipodi:namedview
@@ -31,7 +31,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="184.66408"
+     inkscape:cx="38.90833"
      inkscape:cy="193.66142"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -51,7 +51,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>pipe2</dc:title>
+        <dc:title>4</dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -66,23 +66,22 @@
        transform="translate(0,-64)"
        id="rect6158-6-5" />
     <rect
-       style="fill:#3d9970;fill-opacity:1;stroke-width:1.30503595"
-       id="rect6158-6-5-7"
-       width="224"
-       height="204.8"
-       x="256"
-       y="-6.4000015" />
-    <rect
-       style="fill:#0074d9;fill-opacity:1;stroke:none;stroke-width:1.3287276;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#0074d9;fill-opacity:1;stroke:none;stroke-width:1.87910461;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect16"
-       width="224"
+       width="448"
        height="204.79999"
        x="32"
        y="-6.4000015" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.85783988;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 32,40 V 152 L 144,96 Z m 112,56 v 56 L 256,96 144,40 Z"
-       id="path13"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.40645921;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 144,40 v 56.02989 55.91032 l 112,-55.9701 z m 112,55.97011 v 55.9701 L 368,95.97011 256,40 Z m 112,0 v 55.9701 L 480,95.97011 368,40 Z M 144,96.02989 32,40.059782 V 152 Z"
+       id="path10-7"
        inkscape:connector-curvature="0" />
+    <path
+       style="fill:#001f3f;fill-opacity:1;stroke:none;stroke-width:0.40656775;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 144,151.97011 256,95.970113 144,39.97011 c 0,37.333332 0,74.66667 0,112 z"
+       id="path10-7-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>

@@ -16,7 +16,7 @@
    id="SVGRoot"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="1.svg"
-   inkscape:export-filename="C:\Users\JuanJoseGonGi\python\proyecto2\img\pipe\pipe.png"
+   inkscape:export-filename="C:\Users\JuanJoseGonGi\python\proyecto2\img\pipe\1.png"
    inkscape:export-xdpi="12"
    inkscape:export-ydpi="12">
   <title
@@ -31,7 +31,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="128.29167"
+     inkscape:cx="215.27152"
      inkscape:cy="160"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -79,5 +79,23 @@
        height="204.79999"
        x="32"
        y="-6.4000015" />
+    <path
+       sodipodi:type="star"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path11"
+       sodipodi:sides="3"
+       sodipodi:cx="-248"
+       sodipodi:cy="-48"
+       sodipodi:r1="105"
+       sodipodi:r2="52.5"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m -143,-48 -157.5,90.932667 0,-181.865337 z"
+       inkscape:transform-center-x="-18.666668"
+       transform="matrix(0.71111111,0,0,0.61584029,245.68889,125.56033)"
+       inkscape:transform-center-y="-4.1352141e-06" />
   </g>
 </svg>
