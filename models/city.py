@@ -1,6 +1,5 @@
 from pygame import Rect
 from models.neighborhood import Neighborhood
-from random import randint
 from models.conduct import Conduct
 
 
@@ -25,9 +24,18 @@ class City:
         return rect1.colliderect(rect2)
 
     def set_neighbor_pos(self, neighbor):
-        for neighborhood in self.neighborhoods:
-            while self.has_intersection(neighbor, neighborhood):
-                neighbor.set_pos((randint(30, 1192), randint(30, 652)))
+        n = len(self.neighborhoods) - 1
+        tries = 0
+        while n >= 0:
+            while self.has_intersection(neighbor, self.neighborhoods[n]):
+                if tries > 5000:
+                    return False
+                neighbor.set_random_pos()
+                tries += 1
+                n = len(self.neighborhoods) - 1
+            n -= 1
+
+        return True
 
     def add_conduct(self, n_from, n_to):
         for condu in self.conducts:
@@ -44,7 +52,12 @@ class City:
                 return
 
         neighbor = Neighborhood(name)
-        self.set_neighbor_pos(neighbor)
+        can = self.set_neighbor_pos(neighbor)
+
+        if not can:
+            print("No more space")
+            return None
+
         self.neighborhoods.append(neighbor)
         return neighbor
 
@@ -53,9 +66,9 @@ class City:
             if neighbor.name == name:
                 return neighbor
 
-    def render(self, disp):
+    def render(self, disp, font):
         for conduct in self.conducts:
             conduct.render(disp)
 
         for neighbor in self.neighborhoods:
-            neighbor.render(disp)
+            neighbor.render(disp, font)

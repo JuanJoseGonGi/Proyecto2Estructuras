@@ -10,13 +10,14 @@ class Pipe:
         self.flip_horizontal = False
         self.flip_vertical = False
         self.image = image.load("img/pipe/0.png")
+        self.was_animated = False
 
     def set_pos(self, pos):
         self.rect = Rect(pos, (64, 40))
 
     def increase_state(self, amount=1):
         self.state += amount
-        if self.state > 4:
+        if self.state > 8:
             self.state = 0
 
     def decrease_state(self, amount=1):

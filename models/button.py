@@ -22,23 +22,19 @@ class Button:
         self.height = height
 
         self.text = text
-        self.text_color = bg_accent_color
+        self.text_color = text_color
         self.text_accent_color = text_accent_color
         self.bg_color = bg_color
         self.bg_accent_color = bg_accent_color
 
-        self.click_fn = click_fn
+        self.click = click_fn
 
     def is_hovered(self):
         mouse_pos = mouse.get_pos()
         return (
             self.x <= mouse_pos[0] <= self.x + self.width
-            and self.y <= mouse_pos[1] <= self.height
+            and self.y <= mouse_pos[1] <= self.y + self.height
         )
-
-    def is_clicked(self):
-        click = mouse.get_pressed()
-        return click[0] == 1
 
     def render(self, disp, font):
         bg_color = self.bg_color
@@ -48,13 +44,9 @@ class Button:
             bg_color = self.bg_accent_color
             text_color = self.text_accent_color
 
-        if self.is_clicked():
-            self.click_fn()
-
         draw.rect(disp, bg_color, (self.x, self.y, self.width, self.height))
 
         text_surface = font.render(self.text, True, text_color)
         text_rect = text_surface.get_rect()
         text_rect.center = (self.x + self.width / 2, self.y + self.height / 2)
-
         disp.blit(text_surface, text_rect)

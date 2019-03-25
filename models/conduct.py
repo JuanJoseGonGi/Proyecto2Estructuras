@@ -1,6 +1,4 @@
-from pygame import draw, transform
 from models.pipe import Pipe
-import color
 
 
 class Conduct:
@@ -11,6 +9,7 @@ class Conduct:
         pipe = Pipe()
 
         pipe.is_curve = True
+        pipe.was_animated = True
 
         distance_x = neigh_to.rect.centerx - neigh_from.rect.centerx
         distance_y = neigh_to.rect.centery - neigh_from.rect.centery
@@ -93,14 +92,33 @@ class Conduct:
         self.pipes = self.create_pipes(neigh_from, neigh_to)
         self.frame = 0
 
+    def move_direction(self):
+        non_animated = list(
+            filter(lambda p: p.state > 0 and not p.was_animated, self.pipes)
+        )
+
+        if len(non_animated) == 0:
+            for pipe in self.pipes:
+                if pipe.is_curve:
+                    continue
+                pipe.was_animated = False
+            return
+
+        if non_animated[0].state == 8:
+            non_animated[0].state = 3
+            non_animated[0].was_animated = True
+
+        non_animated[0].increase_state()
+
     def move_water(self):
         self.frame += 1
         if self.frame % 4 != 0:
             return
 
-        non_filled = list(filter(lambda p: p.state != 4, self.pipes))
+        non_filled = list(filter(lambda p: p.state < 4, self.pipes))
 
         if len(non_filled) == 0:
+            self.move_direction()
             return
 
         non_filled[0].increase_state()

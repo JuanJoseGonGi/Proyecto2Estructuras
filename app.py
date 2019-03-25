@@ -4,6 +4,8 @@ import json
 import pygame as pg
 from models.button import Button
 from models.city import City
+from random import randint
+from string import ascii_uppercase
 
 
 class App:
@@ -13,7 +15,8 @@ class App:
             data = json.load(json_file)
             for neighborhood in data:
                 neighbor = city.add_neighborhood(neighborhood["name"])
-                neighbor.set_tank(neighborhood["tank"]["capacity"])
+                if neighborhood["tank"]:
+                    neighbor.set_tank(neighborhood["tank"]["capacity"])
 
             for neighborhood in data:
                 for adj in neighborhood["adjacencies"]:
@@ -47,6 +50,7 @@ class App:
 
         # Objects definition
         self.close_btn = None
+        self.add_btn = None
         self.city = self.load_inital_city()
 
         # Center the window
@@ -55,6 +59,45 @@ class App:
 
     def stop(self):
         self._running = False
+
+    def add(self):
+        name = ""
+        for letter in ascii_uppercase:
+            neigh = list(filter(lambda n: n.name == letter, self.city.neighborhoods))
+            if not len(neigh):
+                name = letter
+
+        neighbor = self.city.add_neighborhood(name)
+
+        if not neighbor:
+            return
+
+        if randint(0, 1):
+            neighbor.set_tank(randint(0, 500))
+
+        if randint(0, 1) and neighbor.tank:
+            n = len(self.city.neighborhoods) - 1
+
+            pos = randint(0, n)
+
+            while (
+                self.city.neighborhoods[pos] == neighbor
+                and not self.city.neighborhoods[pos].tank
+            ):
+                pos = randint(0, n)
+
+            self.city.add_conduct(neighbor, self.city.neighborhoods[pos])
+            return
+
+        if randint(0, 1):
+            n = len(self.city.neighborhoods) - 1
+
+            pos = randint(0, n)
+
+            while self.city.neighborhoods[pos] == neighbor:
+                pos = randint(0, n)
+
+            self.city.add_conduct(self.city.neighborhoods[pos], neighbor)
 
     def on_init(self):
         pg.init()
@@ -74,11 +117,24 @@ class App:
             width=30,
             height=30,
             text="X",
-            text_color=color.WHITE,
+            text_color=color.RED,
             text_accent_color=color.BLACK,
             bg_color=color.BLACK,
             bg_accent_color=color.RED,
             click_fn=self.stop,
+        )
+
+        self.add_btn = Button(
+            x=668,
+            y=738,
+            width=30,
+            height=30,
+            text="+",
+            text_color=color.GREEN,
+            text_accent_color=color.BLACK,
+            bg_color=color.BLACK,
+            bg_accent_color=color.GREEN,
+            click_fn=self.add,
         )
 
         self._running = True
@@ -87,6 +143,13 @@ class App:
         if event.type == pg.QUIT:
             self._running = False
 
+        if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+            if self.close_btn.is_hovered():
+                self.close_btn.click()
+
+            if self.add_btn.is_hovered():
+                self.add_btn.click()
+
     def on_loop(self):
         pass
 
@@ -94,8 +157,9 @@ class App:
         self._disp.fill(color.BLACK)
 
         self.close_btn.render(self._disp, self.smallFont)
+        self.add_btn.render(self._disp, self.mediumFont)
 
-        self.city.render(self._disp)
+        self.city.render(self._disp, self.largeFont)
 
         pg.display.update()
 
