@@ -39,8 +39,8 @@ class App:
         # Window size and pos
         self.width = 1366
         self.height = 768
-        self.x = 183
-        self.y = 206
+        self.x = 0
+        self.y = 0
         self.size = self.width, self.height
 
         # Font definitions
@@ -54,11 +54,13 @@ class App:
         self.obstruction_btn = None
         self.change_dir_btn = None
         self.create_conduct_btn = None
+        self.create_tank_btn = None
         self.city = self.load_inital_city()
 
         # Event flags
         self.is_obstructing = False
         self.is_changing_dir = False
+        self.is_creating_tank = False
         self.to_create_conduct = None
 
         # Center the window
@@ -81,7 +83,7 @@ class App:
             return
 
         if randint(0, 1):
-            neighbor.set_tank(randint(0, 500))
+            neighbor.set_tank(randint(100, 500))
 
         if randint(0, 1) and neighbor.tank:
             n = len(self.city.neighborhoods) - 1
@@ -119,6 +121,10 @@ class App:
         self.to_create_conduct = []
         self.create_conduct_btn.disabled = True
 
+    def tank(self):
+        self.is_creating_tank = True
+        self.create_tank_btn.disabled = True
+
     def button_events(self):
         if not self.close_btn.disabled and self.close_btn.is_hovered():
             self.close_btn.click()
@@ -137,6 +143,9 @@ class App:
             and self.create_conduct_btn.is_hovered()
         ):
             self.create_conduct_btn.click()
+
+        if not self.create_tank_btn.disabled and self.create_tank_btn.is_hovered():
+            self.create_tank_btn.click()
 
     def conduct_events(self):
         for conduct in self.city.conducts:
@@ -168,6 +177,29 @@ class App:
                 self.create_conduct_btn.disabled = False
                 self.to_create_conduct = None
                 break
+
+            if self.is_creating_tank and neighbor.is_hovered():
+                if neighbor.tank:
+                    return
+                neighbor.set_tank(randint(100, 500))
+                self.is_creating_tank = False
+                self.create_tank_btn.disabled = False
+
+    def without_filter(self, n):
+        if n.tank:
+            n.highlight = False
+            return False
+
+        for neigh in self.city.neighborhoods:
+            if not neigh.tank:
+                neigh.highlight = False
+                continue
+
+            if n in neigh.adjacencies:
+                n.highlight = False
+                return False
+
+        return True
 
     def on_init(self):
         pg.init()
@@ -246,6 +278,19 @@ class App:
             click_fn=self.conduct,
         )
 
+        self.create_tank_btn = Button(
+            x=750,
+            y=738,
+            width=160,
+            height=30,
+            text="Add tank",
+            text_color=color.YELLOW,
+            text_accent_color=color.BLACK,
+            bg_color=color.BLACK,
+            bg_accent_color=color.YELLOW,
+            click_fn=self.tank,
+        )
+
         self._running = True
 
     def on_event(self, event):
@@ -258,7 +303,9 @@ class App:
             self.neighbor_events()
 
     def on_loop(self):
-        pass
+        without_tank = filter(lambda n: self.without_filter(n), self.city.neighborhoods)
+        for neigh in without_tank:
+            neigh.highlight = True
 
     def on_render(self):
         self._disp.fill(color.BLACK)
@@ -268,6 +315,7 @@ class App:
         self.obstruction_btn.render(self._disp, self.mediumFont)
         self.change_dir_btn.render(self._disp, self.mediumFont)
         self.create_conduct_btn.render(self._disp, self.mediumFont)
+        self.create_tank_btn.render(self._disp, self.mediumFont)
 
         self.city.render(self._disp, self.smallFont)
 

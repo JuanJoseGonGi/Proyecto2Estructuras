@@ -1,4 +1,4 @@
-from pygame import image, Rect, Color, mouse, gfxdraw
+from pygame import image, Rect, mouse, gfxdraw
 from models.tank import Tank
 
 import color
@@ -14,6 +14,7 @@ class Neighborhood:
         self.image = image.load("img/neighborhood/neighborhood.png")
         self.name = name
         self.selected = False
+        self.highlight = False
 
     def set_pos(self, pos):
         self.rect = Rect(pos, (144, 86))
@@ -35,24 +36,30 @@ class Neighborhood:
     def decrease(self, amount):
         if self.tank:
             self.tank.amount -= amount
+            self.tank.water -= amount
             if self.tank.amount < 0:
                 self.tank.amount = 0
 
     def increase(self, amount):
         if self.tank:
             self.tank.amount += amount
-            if self.tank.amount > 500:
-                self.tank.amount = 500
+            self.tank.water += amount
+            if self.tank.amount > self.tank.capacity + self.tank.capacity / 4 + 1:
+                self.tank.amount = self.tank.capacity + self.tank.capacity / 4 + 1
                 self.over = True
-            else:
+            if self.tank.amount <= 500:
                 self.over = False
 
     def render(self, disp, font):
         disp.blit(self.image, self.rect)
 
+        if self.highlight:
+            gfxdraw.filled_circle(disp, self.rect.right, self.rect.y, 15, color.BLUE)
+            gfxdraw.aacircle(disp, self.rect.right, self.rect.y, 15, color.BLUE)
+
         if self.selected:
-            gfxdraw.filled_circle(disp, self.rect.right, self.rect.y, 14, color.RED)
-            gfxdraw.aacircle(disp, self.rect.right, self.rect.y, 14, color.RED)
+            gfxdraw.filled_circle(disp, self.rect.right, self.rect.y, 15, color.RED)
+            gfxdraw.aacircle(disp, self.rect.right, self.rect.y, 15, color.RED)
 
         if self.tank:
             self.tank.render(disp, font)

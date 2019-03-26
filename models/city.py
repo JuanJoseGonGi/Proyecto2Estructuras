@@ -46,6 +46,22 @@ class City:
         n_from.adjacencies.append(n_to)
         self.conducts.append(conduct)
 
+    def search_conduct(self, n_from, n_to):
+        for conduct in self.conducts:
+            if n_from in conduct.neighs and n_to in conduct.neighs:
+                return conduct
+
+        return None
+
+    def depth_first_search(self, source, visited):
+        if source in self.visited:
+            return
+
+        visited.append(source)
+
+        for adj in source.adjacencies:
+            self.depth_first_search(adj, visited)
+
     def add_neighborhood(self, name):
         for neighbor in self.neighborhoods:
             if neighbor.name == name:
