@@ -16,6 +16,6 @@
   {
     "name": "C",
     "tank": null,
-    "adjacencies": ["A"]
+    "adjacencies": []
   }
 ]

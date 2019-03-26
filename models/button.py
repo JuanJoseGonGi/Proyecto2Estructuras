@@ -15,6 +15,7 @@ class Button:
         text_accent_color=color.BLACK,
         bg_color=color.GREEN,
         bg_accent_color=color.GREEN,
+        disabled=False,
     ):
         self.x = x
         self.y = y
@@ -26,6 +27,8 @@ class Button:
         self.text_accent_color = text_accent_color
         self.bg_color = bg_color
         self.bg_accent_color = bg_accent_color
+
+        self.disabled = disabled
 
         self.click = click_fn
 
@@ -43,6 +46,10 @@ class Button:
         if self.is_hovered():
             bg_color = self.bg_accent_color
             text_color = self.text_accent_color
+
+        if self.disabled:
+            bg_color = color.GRAY
+            text_color = color.BLACK
 
         draw.rect(disp, bg_color, (self.x, self.y, self.width, self.height))
 

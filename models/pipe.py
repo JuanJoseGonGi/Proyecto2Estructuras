@@ -1,4 +1,4 @@
-from pygame import image, Rect, transform
+from pygame import image, Rect, transform, mouse
 
 
 class Pipe:
@@ -11,6 +11,8 @@ class Pipe:
         self.flip_vertical = False
         self.image = image.load("img/pipe/0.png")
         self.was_animated = False
+        self.hide = False
+        self.empty = False
 
     def set_pos(self, pos):
         self.rect = Rect(pos, (64, 40))
@@ -25,11 +27,24 @@ class Pipe:
         if self.state < 0:
             self.state = 4
 
+    def is_hovered(self):
+        mouse_pos = mouse.get_pos()
+        return (
+            self.rect.x <= mouse_pos[0] <= self.rect.x + self.rect.width
+            and self.rect.y <= mouse_pos[1] <= self.rect.y + self.rect.height
+        )
+
     def render(self, disp):
+        if self.hide:
+            return
+
         curve = ""
         if self.is_curve:
             curve = "curve/"
         path = curve + str(self.state) + ".png"
+
+        if self.empty:
+            path = curve + "0.png"
 
         self.image = transform.rotate(image.load("img/pipe/" + path), self.angle)
 

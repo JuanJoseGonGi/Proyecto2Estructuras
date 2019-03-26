@@ -51,7 +51,15 @@ class App:
         # Objects definition
         self.close_btn = None
         self.add_btn = None
+        self.obstruction_btn = None
+        self.change_dir_btn = None
+        self.create_conduct_btn = None
         self.city = self.load_inital_city()
+
+        # Event flags
+        self.is_obstructing = False
+        self.is_changing_dir = False
+        self.to_create_conduct = None
 
         # Center the window
         os.environ["SDL_VIDEO_WINDOW_POS"] = "%i,%i" % (self.x, self.y)
@@ -99,6 +107,68 @@ class App:
 
             self.city.add_conduct(self.city.neighborhoods[pos], neighbor)
 
+    def obstruct(self):
+        self.is_obstructing = True
+        self.obstruction_btn.disabled = True
+
+    def change_dir(self):
+        self.is_changing_dir = True
+        self.change_dir_btn.disabled = True
+
+    def conduct(self):
+        self.to_create_conduct = []
+        self.create_conduct_btn.disabled = True
+
+    def button_events(self):
+        if not self.close_btn.disabled and self.close_btn.is_hovered():
+            self.close_btn.click()
+
+        if not self.add_btn.disabled and self.add_btn.is_hovered():
+            self.add_btn.click()
+
+        if not self.obstruction_btn.disabled and self.obstruction_btn.is_hovered():
+            self.obstruction_btn.click()
+
+        if not self.change_dir_btn.disabled and self.change_dir_btn.is_hovered():
+            self.change_dir_btn.click()
+
+        if (
+            not self.create_conduct_btn.disabled
+            and self.create_conduct_btn.is_hovered()
+        ):
+            self.create_conduct_btn.click()
+
+    def conduct_events(self):
+        for conduct in self.city.conducts:
+            for pipe in conduct.pipes:
+                if pipe.is_hovered():
+                    if self.is_obstructing:
+                        conduct.close()
+                        self.obstruction_btn.disabled = False
+                        self.is_obstructing = False
+                    if self.is_changing_dir:
+                        conduct.change_dir()
+                        self.change_dir_btn.disabled = False
+                        self.is_changing_dir = False
+
+    def neighbor_events(self):
+        for neighbor in self.city.neighborhoods:
+            if self.to_create_conduct is not None and neighbor.is_hovered():
+                self.to_create_conduct.append(neighbor)
+                neighbor.selected = True
+                if len(self.to_create_conduct) != 2:
+                    return
+
+                self.city.add_conduct(
+                    self.to_create_conduct[0], self.to_create_conduct[1]
+                )
+                self.to_create_conduct[0].selected = False
+                self.to_create_conduct[1].selected = False
+
+                self.create_conduct_btn.disabled = False
+                self.to_create_conduct = None
+                break
+
     def on_init(self):
         pg.init()
 
@@ -125,7 +195,7 @@ class App:
         )
 
         self.add_btn = Button(
-            x=668,
+            x=0,
             y=738,
             width=30,
             height=30,
@@ -137,6 +207,45 @@ class App:
             click_fn=self.add,
         )
 
+        self.obstruction_btn = Button(
+            x=30,
+            y=738,
+            width=200,
+            height=30,
+            text="Obstruction",
+            text_color=color.ORANGE,
+            text_accent_color=color.BLACK,
+            bg_color=color.BLACK,
+            bg_accent_color=color.ORANGE,
+            click_fn=self.obstruct,
+        )
+
+        self.change_dir_btn = Button(
+            x=230,
+            y=738,
+            width=260,
+            height=30,
+            text="Change direction",
+            text_color=color.BLUE,
+            text_accent_color=color.BLACK,
+            bg_color=color.BLACK,
+            bg_accent_color=color.BLUE,
+            click_fn=self.change_dir,
+        )
+
+        self.create_conduct_btn = Button(
+            x=490,
+            y=738,
+            width=260,
+            height=30,
+            text="Create conduct",
+            text_color=color.PURPLE,
+            text_accent_color=color.BLACK,
+            bg_color=color.BLACK,
+            bg_accent_color=color.PURPLE,
+            click_fn=self.conduct,
+        )
+
         self._running = True
 
     def on_event(self, event):
@@ -144,11 +253,9 @@ class App:
             self._running = False
 
         if event.type == pg.MOUSEBUTTONUP and event.button == 1:
-            if self.close_btn.is_hovered():
-                self.close_btn.click()
-
-            if self.add_btn.is_hovered():
-                self.add_btn.click()
+            self.button_events()
+            self.conduct_events()
+            self.neighbor_events()
 
     def on_loop(self):
         pass
@@ -158,8 +265,11 @@ class App:
 
         self.close_btn.render(self._disp, self.smallFont)
         self.add_btn.render(self._disp, self.mediumFont)
+        self.obstruction_btn.render(self._disp, self.mediumFont)
+        self.change_dir_btn.render(self._disp, self.mediumFont)
+        self.create_conduct_btn.render(self._disp, self.mediumFont)
 
-        self.city.render(self._disp, self.largeFont)
+        self.city.render(self._disp, self.smallFont)
 
         pg.display.update()
 

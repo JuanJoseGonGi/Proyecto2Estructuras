@@ -1,4 +1,5 @@
 from models.pipe import Pipe
+from random import randint
 
 
 class Conduct:
@@ -91,6 +92,15 @@ class Conduct:
         self.closed = False
         self.pipes = self.create_pipes(neigh_from, neigh_to)
         self.frame = 0
+        self.weight = randint(1, 50)
+
+    def empty(self):
+        for pipe in self.pipes:
+            pipe.state = 0
+
+    def change_amount(self):
+        self.neighs[0].decrease(self.weight)
+        self.neighs[1].increase(self.weight)
 
     def move_direction(self):
         non_animated = list(
@@ -110,12 +120,24 @@ class Conduct:
 
         non_animated[0].increase_state()
 
+        if self.frame % 10 != 0:
+            return
+
+        if self.closed:
+            return
+
+        self.change_amount()
+
     def move_water(self):
+        if not self.neighs[0].tank or self.neighs[0].tank.amount < self.weight:
+            self.empty()
+            return
+
         self.frame += 1
         if self.frame % 4 != 0:
             return
 
-        non_filled = list(filter(lambda p: p.state < 4, self.pipes))
+        non_filled = list(filter(lambda p: p.state < 4 and not p.empty, self.pipes))
 
         if len(non_filled) == 0:
             self.move_direction()
@@ -123,7 +145,44 @@ class Conduct:
 
         non_filled[0].increase_state()
 
+    def close(self):
+        self.closed = True
+        pos = int(len(self.pipes) / 2)
+        self.pipes[pos].hide = True
+
+        for n in range(len(self.pipes)):
+            if n < pos + 1:
+                continue
+            self.pipes[n].empty = True
+
+    def change_dir(self):
+        self.pipes.reverse()
+        for pipe in self.pipes:
+            if pipe.is_curve:
+                continue
+
+            if pipe.angle == 180:
+                pipe.angle = 0
+            elif pipe.angle == 0:
+                pipe.angle = 180
+            elif pipe.angle == 90:
+                pipe.angle = -90
+            elif pipe.angle == -90:
+                pipe.angle = 90
+
+            pipe.empty = False
+            pipe.hide = False
+
+        self.neighs.reverse()
+        if self.closed:
+            self.close()
+
+    def reopen(self):
+        self.closed = False
+        self.pipes[int(len(self.pipes) / 2)].hide = False
+
     def render(self, disp):
         self.move_water()
+
         for pipe in self.pipes:
             pipe.render(disp)
